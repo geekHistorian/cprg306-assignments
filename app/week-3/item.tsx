@@ -9,3 +9,59 @@ function Item(props: { name: string; quantity: number; category: string }) {
 }
 
 export default Item;
+
+
+type TemplateUser = {
+  name: string;
+  age: number;
+  city: string;
+  hobbies: string[];
+}
+
+function Main ({name, age, city, hobbies}: TemplateUser) {
+  let user1: TemplateUser = {
+    name: "Alice",
+    age: 30,
+    city: "New York",
+    hobbies: ["reading", "traveling", "swimming"]
+  };
+
+  let user2 : TemplateUser = {
+    name: "Bob",
+    age: 25,
+    city: "Los Angeles",
+    hobbies: ["gaming", "cycling", "cooking"]
+  };
+
+  let user3 : TemplateUser = {
+    name: "Charlie",
+    age: 35,
+    city: "Chicago",
+    hobbies: ["hiking", "photography", "gardening"]
+  };
+
+  return (
+    <div>
+      <UserCard {...user1} />
+      <UserCard {...user2} />
+      <UserCard {...user3} />
+    </div>
+  );
+}
+
+const HobbyList = ({hobbies}: {hobbies: string[]}) => {
+    return (
+    <ul>
+      {hobbies.map((hobby, index) => (
+        <li key={index}>{hobby}</li>
+      ))}
+    </ul>
+    )
+}; 
+
+function UserCard({name, age, city, hobbies}: TemplateUser) {
+  return (
+    <p>{name} is {age} years old, lives in {city}, and enjoys <HobbyList hobbies={hobbies} />.</p>
+  )
+};
+
