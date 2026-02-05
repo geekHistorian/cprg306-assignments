@@ -7,6 +7,9 @@ function NewItem() {
   const [quantity, setQuantity] = useState(1);
   const [category, setCategory] = useState("Produce");
 
+  // showWarning becomes true only after a blur when the value is invalid (<2)
+  const [showWarning, setShowWarning] = useState(false);
+
   const handleSubmit = (e: { preventDefault: () => void; }) => {
     e.preventDefault();
     if (name.length < 2) return;
@@ -18,10 +21,9 @@ function NewItem() {
     setName("");
     setQuantity(1);
     setCategory("Produce");
+    setShowWarning(false);
   };
 
-  // show warning while the user has typed exactly one character
-  const showWarning = name.length === 1;
   const isFormValid = name.length >= 2;
 
   return (
@@ -48,24 +50,30 @@ function NewItem() {
               id="itemName"
               type="text"
               value={name}
-              onChange={(e) => setName(e.target.value)}
+              onChange={(e) => {
+                // allow typing without warnings while focused
+                setName(e.target.value);
+              }}
+              onFocus={() => {
+                // while typing / focused -> no warning
+                setShowWarning(false);
+              }}
               onBlur={() => {
-                // If user typed something but it's less than 2 chars, clear it on blur.
-                if (name.length > 0 && name.length < 2) {
-                  setName("");
+                // when the user leaves the field, show warning if the value is invalid
+                if (name.length < 2) {
+                  setShowWarning(true);
+                } else {
+                  setShowWarning(false);
                 }
               }}
               className={`w-full px-4 py-3 border-2 rounded-lg transition-all focus:outline-none focus:ring-2 focus:ring-offset-1 ${
-                showWarning
-                  ? "border-red-500 focus:ring-red-500 bg-red-50"
-                  : "border-gray-300 focus:ring-blue-500 focus:border-blue-500 hover:border-gray-400"
+                showWarning ? "border-red-500 bg-red-50 focus:ring-red-500" : "border-gray-300 focus:ring-blue-500 focus:border-blue-500 hover:border-gray-400"
               }`}
             />
 
             {showWarning && (
               <p className="text-red-500 text-sm mt-2 flex items-center gap-1">
-                <span className="text-lg">⚠</span> Item name must be at least 2
-                characters
+                <span className="text-lg">⚠</span> Item name must be at least 2 characters
               </p>
             )}
           </div>
