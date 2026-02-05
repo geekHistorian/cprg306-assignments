@@ -7,7 +7,7 @@ function NewItem() {
   const [quantity, setQuantity] = useState(1);
   const [category, setCategory] = useState("Produce");
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: { preventDefault: () => void; }) => {
     e.preventDefault();
     if (name.length < 2) return;
 
